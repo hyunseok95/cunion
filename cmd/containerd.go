@@ -14,18 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package cunion
+package cmd
 
 import (
-	"errors"
+	"os" //nolint:staticcheck // Global math/rand seed is deprecated, but still used by external dependencies
+
+	"github.com/containerd/containerd/cmd/ctr/app"
+	"github.com/urfave/cli"
+
+	cunionUtil "github.com/hyunseok95/cunion/pkg/util"
 )
 
-func Run(a, b float64) (result float64, err error) {
-	if b == 0 {
-		err = errors.New("You cannot divide by zero!")
-		return
-	}
+var pluginCmds = []cli.Command{}
 
-	result = float64(a) / float64(b)
-	return
+func Containerd() {
+	app := app.New()
+	app.Commands = append(app.Commands, pluginCmds...)
+
+	if err := app.Run(os.Args); err != nil {
+		cunionUtil.CheckErr(err)
+	}
 }

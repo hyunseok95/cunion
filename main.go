@@ -1,36 +1,38 @@
-/*
-Copyright 2016 The Kubernetes Authors.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 package main
 
 import (
 	"crypto"
+	"math/rand"
+	"os"
+	"time"
+
+	"fmt"
 
 	"github.com/containerd/containerd/pkg/hasher"
-	"github.com/containerd/containerd/pkg/seed" //nolint:staticcheck // Global math/rand seed is deprecated, but still used by external dependencies
-
-	test "github.com/hyunseok95/runc/pkg/handbook"
+	"github.com/hyunseok95/cunion/cmd"
 )
 
 func init() {
-	//nolint:staticcheck // Global math/rand seed is deprecated, but still used by external dependencies
-	seed.WithTimeAndRand()
+	rand.NewSource(time.Now().UnixNano())
 	crypto.RegisterHash(crypto.SHA256, hasher.NewSHA256)
 }
 
 func main() {
-	test.Test()
+    args := os.Args
+    if len(args) < 2 {
+        fmt.Println("Please provide a command")
+        os.Exit(1)
+    }
+    command := args[1]
+    fmt.Println("Executing command:", command)
+
+    switch command {
+    case "containerd":
+        cmd.Containerd()
+    case "test":
+        cmd.Test()
+    default:
+        fmt.Println("Unknown command:", command)
+        os.Exit(1)
+    }
 }
