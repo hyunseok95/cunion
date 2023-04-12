@@ -1,9 +1,26 @@
 package handbook
 
 import (
-	util "github.com/hyunseok95/cunion/pkg/handbook/lib"
+	// controlstructures "github.com/hyunseok95/cunion/pkg/handbook/control-structures"
+	Functions "github.com/hyunseok95/cunion/pkg/handbook/functions"
 )
 
-func Test() {
-	util.WithTimeAndRand()
+func Run() error {
+	// if err := controlstructures.IfFunc(); err != nil {
+	// 	return err
+	// }
+
+	// if err := controlstructures.ForFunc(); err != nil {
+	// 	return err
+	// }
+
+	// if err := controlstructures.SwitchFunc(args); err != nil {
+	// 	return err
+	// }
+
+	if err := Functions.Functions(); err != nil {
+		return err
+	}
+
+	return nil
 }
